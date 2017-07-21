@@ -1,0 +1,85 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
+
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	<meta name="viewport" content="width=device-width">
+  <script src="{$basePath}/js/jquery-3.2.1.js"></script>
+  <script>
+      /* HTML tag to HTML entity*/
+      function htmlEncode(value){ return $('<div/>').text(value).html();}
+      /* HTML entity to HTML tag */
+      function htmlDecode(value){ return $('<div/>').html(value).text();}
+  </script>
+
+
+	{block head}{/block}
+
+</head>
+
+<body>
+
+
+
+
+  {snippet flashes}
+
+  	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+	{block scripts-1}
+
+    <script>
+        setTimeout(function(){ $(".flash").fadeOut(3000); }, 3000);
+    </script>
+
+	{/block}
+
+  {/snippet}
+
+
+
+  {snippet calculated}
+
+    <div id="display">{$display}</div>
+
+	{block scripts-2}
+
+        <script>
+            var str = $("#display").html();
+            str = htmlDecode(str);
+            var $displayCalculate   = $( '#displayCalculate' );
+            var $displayCalculateIn = $( '<span id="displayLabel">Output: </span><div id="displayCalculateIn" class="text"></div>' );
+            $displayCalculate.html( $displayCalculateIn );
+            str = str.replace(/  /g, "");
+            $("#displayCalculateIn").html(str);
+            $("#display").html('');
+        </script>
+
+	{/block}
+
+  {/snippet}
+
+
+	{include content}
+
+
+	{block scripts-3}
+
+	<!--script src="https://code.jquery.com/jquery-1.12.0.min.js"></script-->
+	<!--script src="https://nette.github.io/resources/js/netteForms.min.js"></script-->
+<script src="{$basePath}/js/netteForms.js"></script>
+<script src="{$basePath}/js/nette.ajax.js"></script> {* Nette Ajax depens on jQuery *}
+<script src="{$basePath}/js/main.js"></script>
+
+	{/block}
+
+
+</body>
+</html>
